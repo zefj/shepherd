@@ -26,6 +26,13 @@ export class Tour extends Evented {
       'next'
     ]);
     this.options = options;
+
+    if (this.options.steps) {
+      this.options.steps = this.options.steps.map((step) => {
+        return this.setupStep(step);
+      });
+    }
+
     this.steps = this.options.steps || [];
 
     // Pass these events onto the global Shepherd object
