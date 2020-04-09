@@ -5,16 +5,12 @@ on: [push]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.13.0-chrome78-ff70
     name: Test Shepherd.js
     steps:
       - uses: actions/checkout@v2
       - uses: borales/actions-yarn@v2.0.0
         with:
           cmd: install
-      - name: Run the test
+      - name: Unit Tests
         run: yarn test:unit:ci
-      - name: Coverage
-        run: |
-          yarn rewrite-paths
-          codeclimate-test-reporter < coverage/lcov.info
+
