@@ -1,5 +1,5 @@
 import { createPopper } from '@popperjs/core';
-import { isString } from './type-check';
+import { isFunction, isString } from './type-check';
 import { makeCenteredPopper } from './popper-options';
 
 /**
@@ -26,11 +26,16 @@ export function parseAttachTo(step) {
   const options = step.options.attachTo || {};
   const returnOpts = Object.assign({}, options);
 
-  if (isString(options.element)) {
+  if (isFunction(returnOpts.element)) {
+    // Bind the callback to step to enable it to perform additional logic if needed
+    returnOpts.element = returnOpts.element.call(step);
+  }
+
+  if (isString(returnOpts.element)) {
     // Can't override the element in user opts reference because we can't
     // guarantee that the element will exist in the future.
     try {
-      returnOpts.element = document.querySelector(options.element);
+      returnOpts.element = document.querySelector(returnOpts.element);
     } catch (e) {
       // TODO
     }
